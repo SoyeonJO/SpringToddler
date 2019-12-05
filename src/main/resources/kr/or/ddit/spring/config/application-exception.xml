@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+    <!-- 
+       SimpleMappingExceptionResolver : web.xml 내 error-page의 exceptio-type설정과
+       								     동일한 익셉션 별 에러페이지 설정과 활용
+       								    InternalResourceViewResolver와 연계되어서 익셉션 발생시 해당 에러페이지로 포워딩 처리  
+     -->
+    <util:properties id="exceptionMappings">
+        <prop key="Exception">error/error500</prop>
+        <prop key="NullPointException">error/error500</prop>
+        <prop key="RuntimeException">error/error500</prop>
+        <prop key="org.springframework.dao.DataAccessException">error/error500</prop>
+        <prop key="org.springframework.transaction.TransactionException">error/error500</prop>
+    </util:properties>
+    
+    <bean class="kr.or.ddit.global.exception.CustomExceptionResolver"
+         p:exceptionMappings-ref="exceptionMappings"
+         p:defaultErrorView="error/error500.jsp"></bean>
+</beans>

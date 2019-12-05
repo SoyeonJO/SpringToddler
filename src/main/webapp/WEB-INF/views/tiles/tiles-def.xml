@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+	<!-- 
+		definition : 레이아웃 구성단위
+		             name - TilesDispatch가 TilesServlet에 전달한
+		                    문자열과 맵핑되는 기준(definition 선택 기준)
+		             template - definition 내 선언된 개별 attribute에
+		                        name속성값을 기초로 레이아웃을 구성하는
+		                        jsp
+		             * extends - 상속가능
+	 -->
+	<definition name="userMain" template="/WEB-INF/views/user/mainTemplate.jsp">
+		<put-attribute name="title" value="엄마!!미안해!!!"></put-attribute>
+		<put-attribute name="header" value="/WEB-INF/views/user/layout/header.jsp"></put-attribute>
+		<put-attribute name="left" value="/WEB-INF/views/user/layout/left.jsp"></put-attribute>
+		<put-attribute name="content_header" value="/WEB-INF/views/user/content_header.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/user/layout/footer.jsp"></put-attribute>
+	</definition>
+
+	
+	<definition name="user/*/*" extends="userMain">
+		<put-attribute name="content" value="/WEB-INF/views/user/{1}/{2}.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

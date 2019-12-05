@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	<!--Controller에서  @어노테이션을 사용하면 자동 bean등록  -->
+<context:component-scan base-package="kr.or.ddit">
+    <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+</context:component-scan>
+	
+	
+<!-- class 경로 작성시 대소문자구분 -->
+    <!-- 
+       join 
+        http://localhost/SpringToddler/user/join/loginForm.do
+        http://localhost/SpringToddler/user/join/loginCheck.do?mem_id=값&mem_pass=값
+        http://localhost/SpringToddler/user/join/logout.do
+     -->
+																				 <!-- autowire: -->
+<!--  <bean id ="joinController" class="kr.or.ddit.user.join.controller.JoinController" autowire="constructor"></bean>
+ <bean id ="memberController" class="kr.or.ddit.user.member.controller.MemberController"
+       autowire="byName"></bean>
+ 
+ 
+ 
+ 
+ 
+ <bean id ="memberService" class="kr.or.ddit.member.service.IMemberServiceImpl" 
+ 	   autowire="constructor"></bean>
+ <bean id ="memberDao" class="kr.or.ddit.member.dao.IMemberDaoImpl"
+ 	   autowire="constructor"></bean>
+ 
+ <bean id ="freeboardService" class="kr.or.ddit.freeboard.service.IFreeboardServiceImpl"></bean>
+ <bean id ="freeboardDao" class="kr.or.ddit.freeboard.dao.IFreeboardDaoImpl"></bean>
+ 
+ <bean id ="fileItemService" class="kr.or.ddit.FileItem.service.IFileItemServiceImpl"></bean>
+ <bean id ="fileItemDao" class="kr.or.ddit.FileItem.dao.IFileItemDaoImpl"></bean>
+  -->
+ 
+ 
+</beans>

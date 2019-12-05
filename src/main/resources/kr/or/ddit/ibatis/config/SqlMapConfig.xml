@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+   <properties resource="kr/or/ddit/ibatis/config/SqlMapConfig.properties" />
+   <settings cacheModelsEnabled="true"
+           enhancementEnabled="true"
+           lazyLoadingEnabled="true"
+           maxRequests="32"
+           maxSessions="10"
+           maxTransactions="5"
+           useStatementNamespaces="true" />
+  
+   <sqlMap resource="kr/or/ddit/ibatis/mapper/member.xml"/> <!-- mapper를 추가할 때마다 여기에 추가해서 사용해주면 된다. 일반적으로 table 하나에 mapper 하나. -->
+   <sqlMap resource="kr/or/ddit/ibatis/mapper/zipcode.xml"/>
+   <sqlMap resource="kr/or/ddit/ibatis/mapper/freeboard.xml"/>
+   <sqlMap resource="kr/or/ddit/ibatis/mapper/fileitem.xml"/> 
+
+</sqlMapConfig>
+
+
+
+
+

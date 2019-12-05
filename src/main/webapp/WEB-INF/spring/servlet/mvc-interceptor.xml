@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!-- 
+  /user/freeboard/freeboardList.do.
+  /user/freeboard/freeboardView.do.
+  /user/member/memberList.do.
+  /user/member/regist/memberForm.do.
+ -->
+ 
+   <mvc:interceptors>
+       <mvc:interceptor>
+          <mvc:mapping path="/user/**/*.do"/>
+          <bean class="kr.or.ddit.interceptor.IPCheckInterceptor"></bean>
+       </mvc:interceptor>
+       <!-- 
+       <mvc:interceptor>
+          <mvc:mapping path="/user/**/*.do"/>
+          <mvc:exclude-mapping path="/user/join/loginForm.do"/>
+          <bean class="kr.or.ddit.interceptor.LoginCheckInterceptor"></bean>
+       </mvc:interceptor> -->
+   </mvc:interceptors>
+
+
+</beans>

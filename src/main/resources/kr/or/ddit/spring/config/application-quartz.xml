@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<!-- 
+		쿼츠 스케줄링 활용
+		   1. SchedulerFactory : 스케줄 시작, 일시정지, 재시작, 완전종료 등을 제어
+		      * SchedulerFactory 빈 등록 후 활용하며, 인스턴스화시 자동 시작.
+		   2. JOB : 스케줄에 따른 실행되어야하는 비지니스로직(코드)
+		   3. Trigger : 스케줄(주기, 비주기) 설정
+	 -->
+	<bean id="timeCheckJob" class="org.springframework.scheduling.quartz.JobDetailBean"
+		p:jobClass="kr.or.ddit.quartz.config.job.TimeCheckJob">
+	</bean>
+	 
+	<bean id="timeCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"
+		p:cronExpression="0/5 * * * * ?"
+		p:jobDetail-ref="timeCheckJob">
+	</bean>	 
+	
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="timeCronTrigger"/>
+			</list>
+		</property>
+		<property name="autoStartup" value="false"></property>
+	</bean>
+</beans>
+
+
+
+
+
+

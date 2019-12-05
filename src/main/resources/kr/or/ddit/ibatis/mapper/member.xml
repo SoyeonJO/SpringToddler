@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="member">
+	<typeAlias alias="memberVO" type="kr.or.ddit.vo.MemberVO"/>
+	
+	<sql id="selectAll">
+		SELECT *
+		  FROM MEMBER
+		 WHERE MEM_DELETE = 'n' 
+	</sql>
+	
+	
+	<sql id="searchCondition">
+		    
+		    <dynamic prepend="AND">
+		         <isNotEmpty property ="search_keyword" open="(" close=")">
+		                <isEqual property ="search_keycode" compareValue ="TOTAL"> 
+		                BO_TITLE LIKE '%'||#search_keyword#||'%'
+     		    	  OR BO_CONTENT LIKE '%'||#search_keyword#||'%'
+     		       	  OR BO_NICKNAME LIKE '%'||#search_keyword#||'%'
+		                </isEqual>
+		                <isEqual property ="search_keycode" compareValue ="TITLE"> 
+		                BO_TITLE LIKE '%'||#search_keyword#||'%'
+		                </isEqual>
+		                <isEqual property ="search_keycode" compareValue ="CONTENT"> 
+		                BO_CONTENT LIKE '%'||#search_keyword#||'%'
+		                </isEqual>
+		                <isEqual property ="search_keycode" compareValue ="NICKNAME"> 
+		                BO_NICKNAME LIKE '%'||#search_keyword#||'%'
+		                </isEqual>
+		         </isNotEmpty>
+		    </dynamic>
+		</sql>
+	
+	<select id="memberInfo" parameterClass="map" resultClass="memberVO">
+		<include refid="selectAll"/>
+		   AND MEM_ID = #mem_id# 
+		 <dynamic>
+		 	<isNotEmpty property="mem_pass" prepend="AND">
+			   MEM_PASS = #mem_pass#
+		 	</isNotEmpty>
+		 </dynamic>
+	</select>
+	
+	<select id="memberList" resultClass="memberVO">
+		<include refid="selectAll"/> <!-- 중복되는 부분은 하나를 만들어서 id를 이용해 사용 -->
+		<include refid="searchCondition"/> 
+	</select>
+	
+
+
+	<update id="updateMember" parameterClass="memberVO">
+		UPDATE MEMBER
+		   SET MEM_PASS    = #mem_pass# 
+		      ,MEM_HOMETEL = #mem_hometel#
+<!-- 			  ,MEM_COMTEL  = #mem_comtel# -->
+			  ,MEM_HP      = #mem_hp#
+			  ,MEM_MAIL    = #mem_mail#
+			  ,MEM_ADD1    = #mem_add1#
+			  ,MEM_ADD2    = #mem_add2#
+			  ,MEM_JOB     = #mem_job#
+			  ,MEM_LIKE    = #mem_like#
+		 WHERE MEM_ID = #mem_id#  
+	</update>
+	
+	<delete id="deleteMember" parameterClass="map">
+		UPDATE MEMBER
+		   SET MEM_DELETE = 'y'
+		 WHERE MEM_ID = #mem_id#  
+	</delete>
+
+	<insert id="insertMember" parameterClass="memberVO">
+		INSERT INTO MEMBER(MEM_ID, MEM_PASS, MEM_NAME, MEM_REGNO1, MEM_REGNO2, MEM_BIR, MEM_HOMETEL, MEM_COMTEL, MEM_HP, MEM_MAIL, MEM_ZIP, MEM_ADD1, MEM_ADD2, MEM_JOB, MEM_LIKE)
+		  VALUES (#mem_id#, #mem_pass#, #mem_name#, #mem_regno1#, #mem_regno2#, #mem_bir#, #mem_hometel#, #mem_comtel#, #mem_hp#, #mem_mail#, #mem_zip#, #mem_add1#, #mem_add2#, #mem_job#, #mem_like#)
+	</insert>
+</sqlMap>    

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+   <!-- 
+      @RequestBody: 클라이언트 요청시 전송되는 쿼리스트링 원형 취득
+                    mem_id=a001&mem_pass=asdfasdf&mem_name=김은대..
+      @ResponseBody: 컨트롤러 메서드의 반환값이 ViewResolver에 전달되지 않으며, 
+                                클라이언트(브라우저, ajax엔진) 직접 전달
+      redirectAttribute: 컨트롤러 메서드에서 다른 컨트롤러 메서드 대상으로 POST 전송방식의 요청시 쿼리스트링을 GET방식으로 전송할 수 있음 
+                                    마치 GET전송방식으로 쿼리스트링이 전달되는 패턴을 제공.
+                                      
+    -->                           
+
+
+    <mvc:annotation-driven></mvc:annotation-driven>
+</beans>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<!-- 
+		스프링 프레임웍 properites 파일 접근
+	       context:property-placeholder : property-placeholder가 선언된 설정파일 내에서만 properties를 활용.
+	                                      ex) EL을 적용 : ${driver}, ${url}, ${username} 
+	       util:properties : 모든 설정파일 내에서 properties를 활용
+	                         ex)#{util:properties 빈 등록시의 id or name 속성값['프로퍼티스 키값']}
+	                            #{connectionInfo['driver']}, #{connectionInfo['url']}, #{connectionInfo['username']} 
+	 -->
+<!-- 	<context:property-placeholder location="classpath:kr/or/ddit/ibatis/config/SqlMapConfig.properties" -->
+<!-- 		                          file-encoding="UTF-8"/> -->
+	<!-- 
+		스프링 프레임웍 ORM : DataSource - SimpleDriverDataSource (SIMPLE타입 컨넥션 제공 - 테스트용)
+		                                 DriverManagerDataSource(DBCP-X, JNDI-X, SIMPLE타입만 제공)
+		                                 BasicDataSource        (DBCP-O, JNDI-O)
+	 -->
+<!-- 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource" -->
+<!-- 		p:driverClass="${driver}" -->
+<!-- 		p:url="${url}" -->
+<!-- 		p:username="${username}" -->
+<!-- 		p:password="${password}"> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" -->
+<!-- 		p:driverClassName="#{connectionInfo['driver']}" -->
+<!-- 		p:url="#{connectionInfo['url']}" -->
+<!-- 		p:username="#{connectionInfo['username']}" -->
+<!-- 		p:password="#{connectionInfo['password']}"> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" -->
+<!-- 		p:driverClassName="#{connectionInfo['driver']}" -->
+<!-- 		p:url="#{connectionInfo['url']}" -->
+<!-- 		p:username="#{connectionInfo['username']}" -->
+<!-- 		p:password="#{connectionInfo['password']}" -->
+<!-- 		p:maxActive="10" -->
+<!-- 		p:maxIdle="6" -->
+<!-- 		p:removeAbandoned="true" -->
+<!-- 		p:removeAbandonedTimeout="5000" -->
+<!-- 		p:maxWait="-1"> -->
+<!-- 	</bean> -->
+	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/ddit"></jee:jndi-lookup>
+	
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean"
+		p:dataSource-ref="dataSource"
+		p:configLocation="classpath:kr/or/ddit/ibatis/config/SqlMapConfig.xml"
+		p:useTransactionAwareDataSource="true"
+		p:transactionConfigClass="com.ibatis.sqlmap.engine.transaction.external.ExternalTransactionConfig">
+		<property name="transactionConfigProperties">
+			<props>
+				<prop key="DefaultAutoCommit">false</prop>
+				<prop key="SetAutoCommitAllowed">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 
+		ibatis로부터 트랜잭션 처리를 위임 받아서 트랜잭션 관리
+	 -->
+	<bean id="transactionMGR" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource">
+	</bean>
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+

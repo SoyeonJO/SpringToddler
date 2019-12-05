@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:component-scan base-package="kr.or.ddit">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+	</context:component-scan>
+
+<!-- 	<bean id="memberVO" name="m1 m2 m3" class="kr.or.ddit.vo.MemberVO" -->
+<!-- 		p:mem_id="a001" -->
+<!-- 		p:mem_pass="asdfasdf" -->
+<!-- 		p:mem_name="김은대" -->
+<!-- 		c:mem_regno1="111111" -->
+<!-- 		c:mem_regno2="1111118" -->
+<!-- 		c:zipcodeVO-ref="zipcodeVO"> -->
+<!-- 		<constructor-arg value="111111"></constructor-arg> -->
+<!-- 		<constructor-arg value="1111118"></constructor-arg> -->
+<!-- 		<constructor-arg ref="zipcodeVO"></constructor-arg> -->
+<!-- 		<constructor-arg name="mem_regno2" value="1111118"></constructor-arg> -->
+<!-- 		<constructor-arg name="mem_regno1" value="111111"></constructor-arg> -->
+<!-- 		<constructor-arg name="zipcodeVO" ref="zipcodeVO"></constructor-arg> -->
+<!-- 		<constructor-arg index="1" value="1111118"></constructor-arg> -->
+<!-- 		<constructor-arg index="0" value="111111"></constructor-arg> -->
+<!-- 		<constructor-arg index="2" ref="zipcodeVO"></constructor-arg> -->
+<!-- 	</bean> -->
+<!-- 	<bean name="zipcodeVO" class="kr.or.ddit.vo.ZipCodeVO"></bean> -->
+</beans>
+
+
+
+

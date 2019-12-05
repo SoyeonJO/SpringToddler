@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+<!-- 
+    springframwork Commit or Rollback 처리
+       1.@Controller 컨트롤러 클래스 내에 선언된 컨트롤러 메서드의 접근지정자는 반드시 public.
+       2.Service Layer의 클래스 내 존재하는 메서드 상단에 @Transactional 선언
+     스프링 프레임웍 트랜잭션 매니저 
+       1. DAO Layer에서 질의시 발생된 익셉션 Service Layer로 Throws.
+       2. Service Layer에 @Transactional이 선언된 메서드에서 익셉션 Throws.
+          @Transactional에 선언된 특정 익셉션 발생시의 롤백조건이 Throws.
+       3. 컨트롤러 메서드가 취득한  Exception정보, @Transactional을 통해 설정된 rollback정보 
+               롤백 정보가 DispatcherServlet에 제공
+       4. DispatcherServlet이 취득한 정보를 DataSourceTransactionManager에 전달        
+       5. DataSourceTransactionManager 가 취득한 정보를 기초로 커밋과 롤백을 결정 실행.
+
+   어노테이션 베이스의 트랜잭션 처리 활용을 위한 설정
+   transaction-manager: DataSourceTransactionManager의 빈등록시 id or name속성값 설정 
+   proxy-target-class: 트랜잭션 설정 Service layer 존재하는 클래스 내 메서드 상단에 
+                       @Transactional(Propagation선언, 롤백조건[익셉션 발생 종류], 조회일때 처리)
+                                   가 선언되는 메서드가 오버라이딩 된 메서드 여부에 따라 true|false 선언.
+                       *true: 오버라이딩 되지 않은 메소드 상단에 선언으로 트랜잭션 설정 
+                              CGLIB를 활용(@Transactional이 선언된 메서드의 프로토타입을 추출 후 컨트롤러 메서드에 제공)
+                       *false(default):오버라이딩 된 메서드 상단에 선언으로 트랜잭션 설정  
+ -->
+
+   <tx:annotation-driven transaction-manager="transactionMGR" proxy-target-class="false"/>
+
+</beans>

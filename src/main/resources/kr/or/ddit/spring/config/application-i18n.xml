@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+<!--
+  스프링 프레임웍 다국어서비스
+    1. 클라이언트가 서버대상 요청시 요청 헤더 중 Accept-Language= ko-KR을 
+          취득 후 해당 클라이언트 요청시의 해당 국가언어 코드를 취득 후 기 작성되어있는 
+       message_해당국가언어코드.properties 파일을 활용 
+    2. 해당 웹 어플리케이션 서비스를 화용한 유저의 접근 언어를 활용한 준비 
+       message_kr.properties <= 대한민국
+       message_en.properties <= 미국
+       message_jp.properties <= 일본
+       message.properties <= 준비되지 않은 국가로부터 접근시 활용
+     localeResolver: 클라이언트 요청시 요청 헤더의 Accept-Language 취득 후
+     				 properties 파일을 선택하기 위해  ResourceBundleMessageSource
+     				 취득한 접속 국가 언어정보를 제공
+     ResourceBundleMessageSource: 기준비된 properties 파일을 로딩 후 활용 
+-->
+   <bean id ="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver"></bean>
+   <bean id ="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
+         p:basename="kr/or/ddit/i18n/config/message"
+         p:defaultEncoding="UTF-8">
+   </bean>
+   <!--
+     빈클래스 내에서 국제화 서비스를 하기 위한 비즈니스 로직에서 활용 환경 제공 
+     -->
+   <bean id="messageAccessor" class="org.springframework.context.support.MessageSourceAccessor"
+          c:messageSource-ref="messageSource"></bean>
+   
+</beans>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+<!-- 
+   스프링 프레임웍 AOP(관점지향 프로그래밍)
+    * 관심사 분리(중복코드제거)
+    * 빈 클래스 내 존재하는 메서드 대상으로   AOP환경이 구성 
+      -메서드: 시점= 호출 전
+                           종료 후
+                           호출 익셉션 발생 후
+                           호출 전 , 종료 후
+      -메서드의 다양한 시점별 중복 제거된 관심사 코드가 실행되도록
+    
+    키워드: joinpoint - 메서드 
+         pointcut - 다수의 joinpoint(메서드)들의 패키징 된 형태  
+         aspect - 중복제거된 관심사 코드
+         advice - aspect가 실행되어야 하는 pointcut내 개발 joinpoint의 시점.
+                     1. 메서드 호출 전
+                     2. 메서드 종료 후
+                     3. 메서드 호출 이후 익셉션 발생 후 
+                     4. 메서드 호출 전과 종료 후
+         advisor - advice + pointcut 연계 형태 
+         weaving - advisor를 대상으로 aspect가 실행되는 것
+         execution : 접근지정자(생략가능) 반환타입(생략가능) 팩키지(생략가능) 클래스(생략가능) 메서드(파라메터)
+                     *팩키지:..-하위 전체 패키지 의미  
+                     *와일드카드(*): 모든값
+                     *파라메터:.-타입과 상관없이 단일 파라메터를 의미 
+                            .. -타입과 상관없이 선언되지 않거나, 또는 1개 이상 선언된 파라메터
+                            
+                             
+ -->
+
+  <aop:config proxy-target-class="true">
+        <aop:pointcut id="methodPC" expression="execution(* kr.or.ddit..*.*(..))"/>
+		<aop:aspect ref="logPrintAspect">
+		  <aop:before method="joinpointCallBefore" pointcut-ref="methodPC"/>
+	 		<aop:after method="joinpointCallAfter" pointcut-ref="methodPC"/>
+	 		<aop:after-throwing method="joinpointCallAfterThrowing" pointcut-ref="methodPC" throwing="ex"/>
+	 		<aop:around method="joinpointCallAround" pointcut-ref="methodPC"/>
+		</aop:aspect>
+   </aop:config>
+   
+   
+   
+</beans>

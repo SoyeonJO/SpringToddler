@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+<!-- 	<bean name="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
+<!-- 	 	<property name="prefix" value="/WEB-INF/views/"></property> -->
+<!-- 	 	<property name="suffix" value=".jsp"></property> -->
+<!-- 	</bean> -->
+	<bean name="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/WEB-INF/views/"
+		p:suffix=".jsp"
+		p:order="3">
+	</bean>
+	
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"
+		p:order="2">
+	</bean>
+	
+	<!-- 
+		public 반환값 컨트롤러메서드(){
+			return "타일즈 설정파일에 선언된 definition의 name속성값";
+		}
+		
+		* 컨트롤러 메서드의 반환값은 order=1인 tilesViewResolver에 전달
+		  -> 반환값을 기초로 타일즈 설정파일에 definition과 맵핑 성공하면 
+		      해당 definition 대상 포워딩 처리
+		  -> 반환값과 맵핑되는 타일즈 설정파일 내 definition이 존재하지 않으면
+		     order=2인 jspViewResolver에 반환값이 전달
+		     -> prefix+반환값+suffix 문자열 조합한 view(jsp)가 존재하면 포워딩 처리
+		     -> prefix+반환값+suffix 문자열 조합한 view(jsp)가 존재하지 않으면 404
+	 -->
+	<bean id="tilesviewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"
+		p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView"
+		p:order="1">
+	</bean>
+</beans>
+
+
+
+
+
+

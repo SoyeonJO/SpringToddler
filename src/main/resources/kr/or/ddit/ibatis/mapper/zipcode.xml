@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap     
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="zipcode">
+	<typeAlias alias="ZipCodeVO" type="kr.or.ddit.vo.ZipCodeVO"/>
+	<!-- 중복되는 sql문을 간단히 쓰기 위해 sql을 만들고, 각 쿼리문에서 include 속성을 사용해준다. -->
+	<sql id="selectAll">
+		select *
+			from ZIPTB
+	</sql>
+	<select id="zipcodeList" parameterClass="map" resultClass="ZipCodeVO">
+	  <include refid="selectAll"/>
+	   	where dong like '%'||#dong#||'%'
+	</select>
+	
+	
+</sqlMap>

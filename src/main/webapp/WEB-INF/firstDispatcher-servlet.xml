@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+<!-- 
+   IOC(Inversion of Control: 역제어)
+       스프링 프레임웍은 스프링 프레임웍이 관리하는 자원의 생명주기를 컨트롤함
+     *자원의 생명주기: 인스턴스화(객체화), GC(메모리해제), 인스턴스 제공, 해당자원 내 콜백 메서드 호출
+     DL(Dependency Lookup): 스프링 프레임웍에 대상 등록되는 자원의 실체여부를 검증하는 작업
+     DI(Dependency Injection): 스프링 프레임웍은 기본적으로 관리대상 자원의 인스턴스화를  ApplicationContext 생성시 동반 수행.
+     						  *MVCPatternModel2: 웹 어플리케이션별 할당(application-ServletContext)
+     						    스트럿츠2: 웹어플리케이션 별 할당 (ServletActionContext)
+     						    스프링: 웹 어플리케이션별 할당(ApplicationContext)
+     						         ApplicationContext 인스턴스 시점 = 1. 서버 구동시 생성(root context)
+     						         							   2. 클라이언트 요청시(servlet cotext)
+     						        
+   beans -스프링의 생명주기(life cycle)내 작성된 자원을 스프링  프레임웍 관리하에 등록
+       
+    커맨드 컨트롤러:클라이어트로부터 서버 대상으로 주소기반의 요청 전송시 Front controller (DispatcherServlet)이 해당 요청을
+                    스프링 프레임웍에서 처리 여부를 결정하고, 처리 대상 요청은 커맨드 컨트롤러(컨트롤러 클래스)에 위임.
+                    규칙- 반드시 빈으로 등록.
+                           클래스 선언시 클래스 상단에  @Contrller(어노테이션)이 선언
+                            
+   bean: id - 다른 빈과 구분을 위한 구분자(유니크)
+         name - id와 동반 선언시 해당 id의 별명(alias)으로 활용 name만 선언시id 와 동일한 의미부여 
+                name만 선언시 id와 동일한 의미를 부여
+         scope - singleton(default) - 설정파일내 선언된 빈 클래스의 인스턴스는 싱클톤으로 관리 및 제공
+         		  prototype - 빈클래스 DI요청시마다  신규 인스턴스화가 진행되고 제공
+                  request- 동일한 HttpServletRequest 활용시에는 싱글톤으로 빈클래스의 인스턴스가 관리 및 제공되지만, 
+                           HttpServletRequest가 상이한 경우 prototype으로 빈클래스 인스턴스화 수행 
+                  session- 동일한 HttpSession 활용시에는 싱글톤으로 빈클래스의 인스턴스가 관리 및 제공되지만, 
+                           HttpSession가 상이한 경우 prototype으로 빈클래스 인스턴스화 수행 
+       autowire- contructor : 생성자에 선언된 파라메터의 타입과 일치하는 빈이 존재하면 해당 빈의 인스턴스를 생성자를 통해 주입 
+                 byName : 설정파일에 빈등록시 id또는  name속성값을 활용한 메서드 명명 규칙으로 요구되는 빈의 인스턴스가 주입된다.
+                 ex) public void set + '주입받을 빈의 ID또는 NAME속성값'(주입받을 타입){}
+                 byType : 설정파일에 빈 등록된 빈 클래스의 타입을 기준으로 메서드 대상 주입 
+                 ex) public void set + '상관없음'(주입받을 타입){}
+                             
+    컨트롤러 클래스(커맨드 컨트롤러):  @Controller-클라이언트의 요청을 처리하는 클래스
+   
+   
+   컨트롤러 메서드 :  반환값 -1.String(InternalResourceViewResolver에 문자열이 전달되고, prefix와 suffix문자열 조합으로 view가 결정(포워딩)/
+               		  2. void(요청시 서블릿 패스를 기초로 InternalResourceViewResolver에 전달될 문자열이 결정.
+		          		  * View에 전달될 값이 전무하고, 응답 컨텐츠만 클라이언트 대상 제공시.
+		      		  3. Model(인터페이스 - 구현 클래스 ExtendeModalMap)은 void  반환값의 경우와 동일하게 클라이언트의 요청시 서블릿패스를 
+		                		             기초로 View를 결정, 포워딩 되는 해당 view에 전달될 값을 설정. 
+		     		  4. ModelMap(클래스)- void  반환값의 경우와 동일하게 클라이언트의 요청시 서블릿패스를 
+		                 		             기초로 View를 결정, 포워딩 되는 해당 view에 전달될 값을 설정. 
+            		  5. VO- @ModelAttribute 활용 시
+           	     
+                      파라메터 -1. 클라이언트의 요청시 전송되는 쿼리스트링의 키와 일치하는 String 변수 선언
+                      2. 클라이언트의 요청시 전송되는 쿼리스트링의 키와 일치하는 전역변수와 setter가 선언된 클래스(커맨드 오브젝트)
+                      3. HttpServletRequest
+                      4. HttpServletResponse
+                      5. HttpSession
+                      6. Map(HashMap) -  BindingAwareModelMap 주입
+                      7. Model(인터페이스) - ExtendedModelMap implements Model(BindingAwareModelMap 주입)
+                      8. ModelMap(클래스) - 인스턴스가능(BindingAwareModelMap 주입)    
+                      9. ModelAndView(클래스) - 인스턴스 가능(ModelAndView 주입)
+                     10. @PathVariable - 클라이언트 요청시 서블릿 패스 내 존재하는 데이타 취득시 선언
+		             11. @RequestHeader-클라이언트 요청시 전송되는 요청 헤더 취득
+		                               * required=true 미전송시 에러발생
+                                       * requird =false, defaultValue="미전송시 대체값" 
+                      11. @CookieValue- 클라이언트 요청시 전송되는 쿠키 취득
+                                       * required=true 미전송시 에러발생
+                                       * requird =false, defaultValue="미전송시 대체값" 
+                                       
+               @RequestMapping  클라이언트의 요청을 처리하는 실체인 메서드 상단의 선언으로 서블릿 패스와 맵핑으로 구분
+                               1.params - 클라이언트 요청시의 쿼리스트링 제약조건 선언(선언된키= 값일치)
+                               2.method - 클라이언트 요청시 전송방식 대상 제약 조건선언
+                                          * 메소드 생략시 GET,POST 처리 
+   			   @ModelAttribute("View에서 EL로 접근 활용될 키")- 컨트롤러 메서드 상단에 선언시 @ModelAttribute(키)로
+   			                                                                   컨트롤러 메서드의 반환값을 Model.addAttribute(키, 반환값)을
+   			                                                                   저장 후 포워딩 처리되는 View에 전달.
+   	   context:component-scan- base-package속성값 하위의 전체 패키지 내에 존재하는 클래스를 대상으로 어노테이션 베이스 자동 빈 등록 처리.
+   	   						   Controller -클라이언트의 요청을 처리하는 컨트롤러 클래스 상단에  @Controller 선언으로 자동 빈등록 
+   	                           Service - Service 레이어를 구성하는 클래스 상단에  @Service선언으로 자동 빈등록 
+   	                           Repository - DAO 레이어를 구성하는 클래스 상단에 @Repository 선언으로 자동 빈 등록 
+   	                           Component - 특정 레이어에 종속적이지 않은 기타 클래스 상단에 
+   	                                       @Component 선언으로 자동 빈 등록 
+                              
+                             
+                                              활용 가능 어노테이션
+                                 * Spring 프레임웍 제공 
+                                  1.@Autowired: 전역변수, 생성자, 메서드 상단에 선언으로 타입을 기준으로 
+                                                                        해당 타입과 일치하는 빈의 인스턴스가 DI(자동주입)
+                                                ex) @Controller
+                                                    @Qualifier("")
+                                                 class FreeboardController{
+                                                     @Autowired
+                                                     private IFreeboardService service;
+                                                     @Autowired
+                                                     public FreeboardController(IFreeboardService service){}
+                                                     @Autowired
+                                                     public void injectionService(IFreeboardService service){}
+                                                }
+                                                <bean id= iFreeboardServiceImpl class.../>
+                                                 @Service   	                                       		                                                                   
+ 											     class IFreeboardServiceImpl1 implements IFreeboardService{
+ 											     }
+ 											     <bean id =iFreeboardServiceImpl2 class.../>
+                                                 @Service   	                                       		                                                                   
+ 											     class IFreeboardServiceImpl implements IFreeboardService{
+ 											     }
+ 								    2.Qualifier:DI 대상 빈의 타입이 중복되는 경우 중복제거(빈 등록시의 id or name속성값 활용)
+ 								      *JSR-330 스펙(JDK 7에 포함 스펙)		     
+ 									3.@Resource: 전역변수, 메서드 상단에 선언으로 타입을 기준으로 
+                                                                          해당 타입과 일치하는 빈의 인스턴스가 DI(자동주입)
+                                    4.@Required: property(네임스페이스 p)를 활용해서 필수 주입 의미 
+                                    5.@Value: util:properties를 활용해서 properties파일 접근 시 
+                                                                      해당 프로퍼티스 파일의 키를 빈 클래스내에서 선언으로 활용
+                                    6.@PreDestroy: 빈클래스가 GC되기 직전에 콜백되는 메서드 상단에 선언 
+                                    7.@PostContructor: 빈클래스가 최초 인스턴스화  직후에 콜백되는 메서드 상단에 선언
+                                    8.@Inject: 전역변수,생성자, 메서드 상단에 선언으로 타입을 기준으로 
+                                                                          해당 타입과 일치하는 빈의 인스턴스가 DI(자동주입)
+                                                  *java-inject-?.?.jar import 활용 가능 
+ -->
+                                                                              
+  <bean id="firstController" class="kr.or.ddit.first.controller.FirstController" ></bean>
+		
+   
+</beans>

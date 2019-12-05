@@ -1,0 +1,154 @@
+트랜잭션(All or Nothing)
+1. 트랜잰셕의 특징(RDBMS 보장 요소) 
+   ACID : Atomicity(유일성, 원자성): Transaction은 운영의 전체 절차가 성공이거나 실패를 의미하는 운영의 단일 단위로써 
+                                            취급되어질 수 있다.(다수의 쿼리를 하나의 처리 단위로 취급)
+          Consistency(정합성): Table의 유일한 PK(unique primary key), database의 참고적인 무결성등의 정합성을 
+                                      나타낸다.(데이타 처리 순서의 정확성)
+          Isolation(고립성): Transaction 동시에 같은 데이터를 처리하는 많은 transaction이 있을 수 있다. 
+                                    각각의 transaction은 데이터의 오염을 방지하기 위해 각각으로 부터 고립되어야 한다.
+                           (다수의 트랜잭션 처리에서 서로 다른 트랜잭션의 상태에 영향을 받지 않도록 보장)
+          Durability(내구성, 영속성): Transaction이 완료된 이후에는 그 결과는 영속성을 갖고 system 실패로 인하여 
+                                   database로부터 삭제될 수 없다.
+                                   (트랜잭션을통해 영향받은 스키마는 변경되어서는 안됨)
+2. 트랜잭션의 종류
+   2.1 Local Transaction : 단일 시스템내에서의 트랜잭션 리소스.
+       Global Transaction : 분산된 다수의 시스템의 통합과정에서 존재하는 트랜잭션 리소스.
+
+3. 스프링 프레임웍 제공 트랜잭션의 형태
+   3.1 트랜잭션 설정파일(트랜잭션 매니저와 <tx:annotation-driven> 선언)은 root-context가 아닌
+      servlet-context에 정의되어야함.
+   3.1 프로그램 베이스 트랜잭션 관리 : 일반적인 코드를 통한 트랜잭션(시작, 컴밋, 롤백) 관리
+   3.2 AOP를 활용한 선언적 트랜잭션 관리 : 비지니스 로직으로부터 관심 대상의 트랜잭션 관련 코드를 분리하여 AOP 모듈화.
+                                   (스프링 프레임웍 활용시 일반적인 트랜잭션 관리 패턴)
+   3.3 어노테이션을 활용한 선언적 트랜잭션 관리 : 어노테이션을 활용한 트랜잭션 관련 코드 모듈화.
+
+4. Rollback 규칙
+    4.1 스프링 프레임웍 + JDBC | iBatis | MyBatis 조합시 질의에따른 에러 또는 경고는
+        Runtime-Exception Type(DataAccessException, NestedException 등)이 드로우 처리됨.
+    4.2 스프링 프레임웍은 default로 RuntimeException 발생시 Rollback 처리.
+    4.3 private 접근지정자가 선언된 메서드에 @Transaction은 무효.
+    4.4 @Transaction이 선언된 메서드는 Dao에서 발생된 익셉션을 throw.
+    4.5 Rollback 규칙이 적용되어야하는 모든 Service Layer의 메서드에 적용.
+                              
+4. 스프링 프레임웍 트랜잭션 추상화 관련 자원
+   interface org.springframework.transaction.PlatformTransactionManager
+        * 기 존재하는 트랜잭션 또는 생성 후 트랜잭션 전파 
+        * 컴밋처리
+        * 롤백처리
+        
+   interface org.springframework.transaction.TransactionDefinition
+        * 트랜잭션 상태 처리
+			- TransactionDefinition.PROPAGATION_MANDATORY
+			  current transaction을 지원. 만약 current transaction이 없으면 exception 발생.
+			- TransactionDefinition.PROPAGATION_NEVER 
+			  current transaction 지원 안함. 만약 현재 transaction이 있다면 exception 발생.
+			- TransactionDefinition.PROPAGATION_NESTED 
+			  current transaction이 있다면 nested transaction(중첩된 트랜잭션)에서 실행.
+			- TransactionDefinition.PROPAGATION_SUPPORTS 
+			  current transaction 지원. 만약 존재하지않으면 non-transaction하게 실행.
+			- TransactionDefinition.PROPAGATION_NOT_SUPPORTED 
+			  current transaction지원 안함. 항상 non-transaction하게 실행.
+			- TransactionDefinition.PROPAGATION_REQUIRED 
+			  current transaction 지원. 만약 없으면 새로 하나 생성.
+			- TransactionDefinition.PROPAGATION_REQUIRES_NEW 
+			  새로운 transaction 생성. 만약 존재한다면 current transaction을 멈춤.
+			- TransactionDefinition.TIMEOUT_DEFAULT 
+			  transaction system에 기반한 기본 timeout 사용 또는 timeout이 지원되지 않으면 none 사용.
+			  
+        * 타 트랜잭션 작업과의 격리(Isolation(고립성)) 정도
+          ** dirty read : 기타 트랜잭션이 특정 트랜잭션의 커밋 처리 전 변경 데이타 열람이 가능함.
+                                  특정 트랜잭션이 컴밋이 아닌 롤백 처리시, 기타 트랜잭션은 열람된 dirty data가 취득되며,
+                                  데이터 무결정에 위반 현상과 유일성 제약조건이 위반되는 현상이 발생됨.
+          ** repeatable read : 질의 횟수와 해당 질의들에의해 특정 트랜잭션이 조회한 레코드들을 대상으로, 기타 트랜잭션의 
+                                        변경처리 횟수에 관계없이 특정 트랜잭션이 동일한 질의에서 항상 동일한 데이터를 조회되는것을 
+                                        보장.
+          ** non-repeatable read : repeatable read의 반대.
+          ** phantom read : 특정 트랜잭션 내에서 특정 범위의 레코드를 대상으로 반복 조회 질의시, 최초 조회 질의시에 
+                                    존재한지않던  유령 레코드가 출현할수있으며, 트랜잭션 처리 중 추가 질의를 허용하는데 원인이
+                                    있으며, non-repeatable read와는 다르게 레코드 증가 현상이 발생. 
+          ** read only : 트랜잭션 내에서 레코드 조회만을 실행하는 경우. 
+          
+             격기 수준 : - TransactionDefinition.ISOLATION_DEFAULT
+                            기본 격리 레벨
+                    - TransactionDefinition.ISOLATION_READ_UNCOMMITTED
+                            특정 컴밋되지않은 트랜잭션의 변경 데이타는 다른 트랜잭션에의해 열람이 가능함.
+                      (dirty read, non-repeatable read, phantom read 발생)
+                      (오라클 미지원)
+                    - TransactionDefinition.ISOLATION_READ_COMMITTED
+                            일반적인 RDBMS가 지원하는 트랜잭션 격리 레벨로서 트랜잭션 간 컴밋되지않은
+                            데이타의 열람이 불가능함.
+                      (dirty read 방지, non-repeatable read, phantom read 발생)
+                      (오라클 기본모드)
+                    - TransactionDefinition.ISOLATION_REPEATABLE_READ
+                            특정 트랜잭션의 데이타 추가 후 컴밋 전 기타 트랜잭션에의해 추가된 데이타 열람만 가능함.
+                      (dirty read와 non-repeatable read 방지, phantom read 발생)
+                      (오라클 for update를 포함하는 절을통해 지원)
+                    - TransactionDefinition.ISOLATION_SERIALIZABLE
+                            가장 신뢰할수있는 격리 레벨로 특정 트랜잭션의 컴밋 전 기타 트랜잭션의 어떠한 영향을 받지않음.
+                      (dirty read와 non-repeatable read, phantom read 방지)
+                      (오라클 지원)
+        * 트랜잭션명 반환
+        * 현재 트랜잭션의 속성 대상 상태(읽기전용, 쓰기 전용 등)
+
+	interface org.springframework.transaction.TransactionStatus
+	   * current transaction 실행(execution)과 transaction 상태 질의(query) 제어(control).
+	   * current transaction이 save point(Rollback 시점)기반의 nested transaction로 생성 여부.
+	   * current transaction의 commit or rollback 여부.
+	   * 신규 생성 transaction 여부.
+	   * current transaction의 rollback-only 여부.
+	   
+5. 설정파일 트랜잭션 설정.
+	5.1 트랜잭션 메니저 빈등록
+	    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		   p:dataSource-ref="dataSource">
+	    </bean>
+	    
+    5.2 transaction namespace 추가
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        
+    5.3 프로그래밍 기반 트랜잭션 처리
+        5.3.1 kr.or.ddit.member.service.IMemberServiceImpl의
+               insertIdPictureInfo() 내부
+        
+    5.3 선언적 트랜잭션 처리 추가
+        * 메이븐 환경 설정 추가
+	        <!-- AspectJ -->
+			<dependency>
+			    <groupId>org.aspectj</groupId>
+			    <artifactId>aspectjrt</artifactId>
+			    <version>${org.aspectj-version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.aspectj</groupId>
+			    <artifactId>aspectjweaver</artifactId>
+			    <version>${org.aspectj-version}</version>
+			</dependency>  
+			<dependency>  
+			    <groupId>org.aspectj</groupId>
+			    <artifactId>aspectjtools</artifactId>
+			    <version>${org.aspectj-version}</version>
+			</dependency>
+        5.3.1 Advice 등록
+        5.3.2 트랜잭션 처리가 Weaving될 point cut과 advice의 advisor 정의
+
+		* 트랜잭션 적용 타겟 메서드의 접근 지정자는 반드시 public.
+   5.4 어노테이션 기반 트랜잭션 처리 추가
+        5.4.1 설정파일에 <tx:annotation-driven transaction-manager="transactionManager"/> 추가
+        5.4.2 서비스 레이어의 트랜잭션 처리 메서드 상위에 @Transactional 선언
+              @Transactional(propagation=Propagation.REQUIRED, readOnly=true)
+              @Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+   
+                                 
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   

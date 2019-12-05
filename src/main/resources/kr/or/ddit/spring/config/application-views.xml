@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<!-- 
+		컨트롤러 클래스{
+			컨트롤러 메서드(){
+				return new ModelAndView().addObject(키,값).setViewName("jsonConvertView");
+			}
+		}
+		
+		// View 클래스(클라이언트[브라우저|ajax엔진] 대상 취득한 값을 
+		// json 형식 문자열로 변경 후 내부적으로 @ResponseBody 처리. 
+		class MappingJackson2JsonView extends AbstractView{
+		}
+	 -->
+	<bean id="jsonConvertView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean>
+</beans>
+
+
+
+
+
+
+
+

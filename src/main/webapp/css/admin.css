@@ -1,0 +1,50 @@
+@font-face{font-family:NanumGothic;src:url(./font/NanumGothic.eot);src:local(※),url(./font/NanumGothic.woff) format('woff')}
+
+* { font-family: NanumGothic, '나눔고딕', Dotum; }
+html, body{ margin:0px; padding:0px;}
+img { border:0px; padding:0; margin:0;}
+table {color:#252525; line-height:18px;}
+form, p, fieldset, label {margin: 0px; padding: 0px;}
+h1, h2, h3, h4, h5, h6 {margin: 0px; padding: 0px;}
+ul, li, p, form, dl, dt, dd {margin:0px; padding:0px;}
+li {list-style:none;}
+a, a:link, a:visited {font-size: 12px;color:#474747;text-decoration: none;}
+a:active, a:hover {color:#3a7346; /*text-decoration: underline;*/}
+body { font-size:12px; font-family: NanumGothic, '나눔고딕', Dotum; color:#252525; }
+body.home { background:#fefcf7; }
+
+.wrap { width:1000px; margin:auto;}
+
+#header {clear:both; color:#555555;	font-family:NanumGothic; line-height:20px; height:105px; border-bottom:#736356 solid 1px; margin-bottom:20px; !important;}
+#header .logo {float:left; padding:10px 0; position:absolute; top:10px;}
+#header .top_bn {text-align:right; margin-top:10px; height:30px;}
+#header .top_bn ul {float:right}
+#header .top_bn li {list-style:none; float:left; padding-left:3px;}
+#header .gnb {float:right; }
+#header .gnb ul{margin-top:35px;}
+#header .gnb ul li{list-style:none; float:left; border-right:#333 dotted 1px; padding:0 20px;}
+#header .gnb ul li a{font-family:NanumGothic, malgun gothic, dotum; font-weight:bold; font-size:13px;letter-spacing:-1px; }
+
+#left_menu
+.tt{background:url(../image/left_mn_bg.jpg) no-repeat; height:35px; color:#FFF; font-size:18px; font-weight:bold; padding-top:12px; text-align:center;}
+#left_menu ul {}
+#left_menu li {list-style:none; border-bottom:#CCC solid 1px; width:180px; text-align:left; padding:5px 0;}
+#left_menu li a{color:534741; line-height:22px;font-size:13px; font-weight:bold;  }
+
+#container {text-align:left; line-height:170%; }
+#container .title {font-size:16px; font-weight:bold; padding:11px 0 14px 23px; background:url(../image/ico_01.gif) 5px 12px no-repeat; border-bottom:#CCC solid 1px; margin-bottom:10px;}
+#container table {background:#ccc; width:100%; margin:10px 0; }
+#container table th {background:#efefef; padding:7px 5px; text-align:center;}
+#container table td {background:#fff; padding:7px 10px;}
+
+.r {color:#F00;}
+.btn1 { background:#ccc; border:#c2c2c2 1px solid; cursor:pointer; color:#111; text-align:center; padding:3px 10px; font-size:12px;}
+.closeBtn { background:#ccc; border:#c2c2c2 1px solid; cursor:pointer; color:#111; text-align:center; padding:3px 10px; font-size:12px;}
+.makeExcel { background:#ccc; border:#c2c2c2 1px solid; cursor:pointer; color:#111; text-align:center; padding:3px 10px; font-size:12px;}
+.saveBtn { background:#ccc; border:#c2c2c2 1px solid; cursor:pointer; color:#111; text-align:center; padding:3px 10px; font-size:12px;}
+.btn2 { background:#362f2d; border:#24201e 1px solid; cursor:pointer; color:#fff; text-align:center; padding:3px 10px; font-size:12px;}
+.publishingCoupon { background:#362f2d; border:#24201e 1px solid; cursor:pointer; color:#fff; text-align:center; padding:3px 10px; font-size:12px;}
+.btn3 { background:#707070; border:#24201e 1px solid; cursor:pointer; color:#fff; text-align:center; padding:2px 10px; font-size:12px;}
+
+/* 추가 */
+.checkbox_align {vertical-align:middle; }

@@ -1,0 +1,57 @@
+Spring Quartz
+
+1. OS에 내장된 스케줄러(Windows Scheduler, Linux Cron Tab or AT) 외 자바기반의 경량화된 스케줄러
+
+2. 설치
+   http://www.quartz-scheduler.org/downloads 에서
+     (api : http://www.quartz-scheduler.org/api/2.0.0/)
+     quartz-2.0.2.tar.gz 다운로드 
+         quartz-2.0.2.jar 
+         log4j-1.2.17.jar
+         
+   또는
+      <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring-framework.version}</version>
+	  </dependency>
+      <dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.5</version>
+	  </dependency>
+	  
+3. 표현식
+   cronExpression
+	* : 모든 값
+	? : 특정 값 없음
+	- : 범위 지정
+	, : 여러 값 지정 구분에 사용
+	/ : 초기값과 증가치 설정에 사용
+	L : 지정할 수 있는 범위의 마지막 값
+	W : 월~금요일 또는 가장 가까운 월/금요일
+	# : 몇 번째 무슨 요일 2#1 => 첫 번째 월요일 
+	
+	
+	seconds      minutes      hours      day-of-month       month     day-of-week     year
+	0-59         0-59         0-23       1-31               1-12      1-7             1970-2099
+	,-*/         ,-*/         ,-*/       ,-*/?              ,-*/      ,-*/?           ,-*/
+	
+	예제)
+	"0 0 12 * * ?"	 		매일 정오 12시에 실행
+	"0 15 10 ? * *"	 		매일 오전 10시 15분에 실행
+	"0 15 10 * * ?"	 		매일 오전 10시 15분에 실행
+	"0 15 10 * * ? *"	    매일 오전 10시 15분에 실행
+	"0 15 10 * * ? 2005"	2005년 동안 매일 오전 10시 15분에 실행
+	"0 * 14 * * ?"	 		매일 오후 2시부터 시작하여 오후 2시 59분까지 실행
+	"0 0/5 14 * * ?"	    매일 오후 2시부터 2시 55분까지 5분 간격으로 실행
+	"0 0/5 14,18 * * ?"	 	매일 오후 2시부터 2시 55분까지, 오후 6시부터 6시 55분까지 5분 간격으로 실행
+	"0 0-5 14 * * ?"	    매일 오후 2시부터 2시 05분까지 분 단위로 실행
+	"0 10,44 14 ? 3 WED"	3월의 매주 수요일 오후 2시 10분과 2시 44분에 실행
+	"0 15 10 ? * MON-FRI"	매주 월요일부터 금요일까지 오전 10시 15분에 실행
+	"0 15 10 15 * ?"	    매달 15일 오전 10시 15분에 실행
+	"0 15 10 L * ?"	 		매달 마지막 날 오전 10시 15분에 실행
+	"0 15 10 ? * 6L"	    매월 마지막 금요일 오전 10시 15분에 실행
+	"0 15 10 ? * 6#3"	    매월 세번째 금요일 오전 10시 15분에 실행
+	
+4. 
