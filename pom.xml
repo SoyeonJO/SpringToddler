@@ -63,7 +63,7 @@
 		<!-- super-csv read/write -->
 		<super.csv-version>2.1.0</super.csv-version>
 		<!-- etc -->
-		<hibernate.validator-version>4.0.2.GA</hibernate.validator-version>
+		<hibernate.validator-version>5.3.5.Final</hibernate.validator-version>
 	</properties>
 	
 	<!-- 오라클 라이센스 정책으로 메이븐 중앙저장소가 아닌 외부 레포지토리로부터 OJDBC6.jar 다운로드 수행을위한 레포지토리 등록  -->
